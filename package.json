@@ -1,0 +1,25 @@
+{
+  "name": "predicate-validation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/validator.js",
+  "scripts": {
+    "compile": "tsc -p .",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fp-ts": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.4"
+  }
+}
