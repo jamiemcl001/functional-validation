@@ -11,11 +11,30 @@ function lift<L, A> (check: (a: A) => Either <L, A>): (a: A) => Either <NonEmpty
     );
 }
 
-export function validate<T>(validationFunctions: Array <(val: T) => Either<string, T>>, value: T) {
-  const functions = validationFunctions.map(fn => lift(fn)(value))
+type ValidationFunctionWrapper<T> = {
+  predicateFn: (val: T) => boolean,
+  input: T,
+  errorMessage: string,
+}
 
-  return pipe(
-    array.sequence(getValidation(getSemigroup<string>()))(functions),
-    map(() => value)
-  );
+export function createValidator<T>() {
+  let validationFunctions: Array<ValidationFunctionWrapper<T>> = [];
+
+  return {
+    add(predicateFn: (val: T) => boolean, input: T, errorMessage: string) {
+      validationFunctions = [...validationFunctions, { predicateFn, input, errorMessage, }];
+      return this;
+    },
+    validate(): Either<NonEmptyArray<string>, void> {
+      const functionResults = validationFunctions.map(fn => {
+        const result = fn.predicateFn(fn.input);
+        return result ? right(null) : lift(left)(fn.errorMessage);
+      });
+
+      return pipe(
+        array.sequence(getValidation(getSemigroup<string>()))(functionResults),
+        map(() => {})
+      );
+    }
+  };
 }
