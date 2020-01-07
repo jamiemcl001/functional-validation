@@ -17,11 +17,16 @@ type ValidationFunctionWrapper<T> = {
   errorMessage: string,
 }
 
+type Validator<T> = {
+  add: (predicateFn: (val: T) => boolean, input: T, errorMessage: string) => Validator<T>
+  validate(): Either<NonEmptyArray<string>, void>
+}
+
 export function createValidator<T>() {
   let validationFunctions: Array<ValidationFunctionWrapper<T>> = [];
 
   return {
-    add(predicateFn: (val: T) => boolean, input: T, errorMessage: string) {
+    add(predicateFn: (val: T) => boolean, input: T, errorMessage: string): Validator<T> {
       validationFunctions = [...validationFunctions, { predicateFn, input, errorMessage, }];
       return this;
     },
