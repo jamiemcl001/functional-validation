@@ -4,6 +4,9 @@
   "description": "",
   "main": "./dist/validator.js",
   "types": "./dist/validator.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "compile": "tsc -p .",
     "test": "jest"
