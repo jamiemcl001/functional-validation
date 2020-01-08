@@ -1,12 +1,9 @@
 {
   "name": "predicate-validation",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "",
   "main": "./dist/validator.js",
   "types": "./dist/validator.d.ts",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "compile": "tsc -p .",
     "test": "jest"
