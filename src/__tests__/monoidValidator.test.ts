@@ -1,4 +1,4 @@
-import { createValidator } from '../validator';
+import { createValidator } from '../monoidValidator';
 import { isLeft, isRight, fold } from 'fp-ts/lib/Either';
 
 test('it should evaluate the predicates correctly', () => {
@@ -47,4 +47,16 @@ test('it should work with validators with no set type', () => {
   expect(isLeft(validatonResult)).toEqual(true)
   expect(fold(errorVal => errorVal, successVal => successVal)(validatonResult))
     .toEqual(["the input value of the passed object should be greater than 20", "the value should be an even number"]);
-})
+});
+
+
+test('it should concatenate the results', () => {
+  const validatonResult = createValidator()
+    .add("test", val => val.length > 0, "the value should be at least 3 characters")
+    .add("test2", val => val.length > 0, "the value should be at least 3 characters")
+    .add("test3", val => val.length > 0, "the value should be at least 3 characters")
+    .validate();
+
+  expect(isRight(validatonResult)).toEqual(true);
+  expect(isRight(validatonResult) && validatonResult.right).toEqual(["test", "test2", "test3"]);
+});
