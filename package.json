@@ -1,6 +1,6 @@
 {
   "name": "predicate-validation",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "",
   "main": "./lib/validator.js",
   "types": "./lib/validator.d.ts",

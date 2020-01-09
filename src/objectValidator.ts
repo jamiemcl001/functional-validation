@@ -46,3 +46,11 @@ export function isSuccess(input: ObjectResult): input is SuccessResult {
 export function isError(input: ObjectResult): input is ErrorResult {
   return input._tag === 'error';
 }
+
+export function getErrors(result: ObjectResult): string[] {
+  return isError(result) ? result.errors : [];
+};
+
+export function getResults(result: ObjectResult): unknown[] {
+  return result.value;
+};
