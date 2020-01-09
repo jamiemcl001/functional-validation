@@ -1,9 +1,9 @@
 {
   "name": "predicate-validation",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "",
-  "main": "./dist/validator.js",
-  "types": "./dist/validator.d.ts",
+  "main": "./lib/validator.js",
+  "types": "./lib/validator.d.ts",
   "scripts": {
     "compile": "tsc -p .",
     "test": "jest"

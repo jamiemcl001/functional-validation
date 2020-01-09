@@ -3,8 +3,8 @@ import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
 import { pipe } from 'fp-ts/lib/pipeable';
 import { createValidator as createMonoidValidator } from './monoidValidator';
 
-type Validator = {
-  add: <T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string) => Validator
+export type ObjectValidator = {
+  add: <T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string) => ObjectValidator
   validate(): ObjectResult
 }
 
@@ -13,19 +13,28 @@ type SuccessResult = { _tag: 'success', value: unknown[] }
 type ObjectResult = ErrorResult | SuccessResult;
 
 export function createValidator() {
-  const monoidValidator = createMonoidValidator();
+  const errorMessages: string[] = [];
+  const capturedValues: unknown[] = [];
 
   return {
-    add<T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string): Validator {
-      monoidValidator.add(input, predicateFn, errorMessage);
+    add<T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string): ObjectValidator {
+      try {
+        const result = predicateFn(input);
+        if (!result) {
+          errorMessages.push(errorMessage);
+        } else {
+          capturedValues.push(input);
+        }
+      } catch {
+        errorMessages.push(errorMessage);
+      }
+      
       return this;
     },
     validate(): ObjectResult {
-      const result = monoidValidator.validate();
-      
-      return isRight(result) ? 
-        { _tag: 'success', value: result.right } :
-        { _tag: 'error', value: [], errors: result.left };
+      return errorMessages.length === 0 ? 
+        { _tag: 'success', value: capturedValues } :
+        { _tag: 'error', value: [], errors: errorMessages };
     }
   };
 }

@@ -1,7 +1,5 @@
-import * as monoidValidator from './monoidValidator';
-import * as objectValidator from './objectValidator';
+import { createValidator as createMonoidValidator } from './monoidValidator';
+import { createValidator as createObjectValidator } from './objectValidator';
 
-export default {
-  monoidValidator,
-  objectValidator
-};
+export const getMonoidValidator = () => createMonoidValidator();
+export const getObjectValidator = () => createObjectValidator();

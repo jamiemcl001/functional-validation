@@ -1,5 +1,4 @@
 import { createValidator, isSuccess, isError } from '../objectValidator';
-import { isLeft, isRight, fold } from 'fp-ts/lib/Either';
 
 
 test(`it should give us an object if we don't want to work with monoids`, () => {

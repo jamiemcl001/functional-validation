@@ -7,8 +7,8 @@ function lift<L, A> (check: (l: L) => Either<L, A>): (l: L) => Either<NonEmptyAr
   return l => pipe(check(l), mapLeft(l => [l]));
 }
 
-type Validator = {
-  add: <T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string) => Validator
+export type MonoidValidator = {
+  add: <T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string) => MonoidValidator
   validate(): Either<NonEmptyArray<string>, unknown>
 }
 
@@ -16,7 +16,7 @@ export function createValidator() {
   const functionResults: Array<Either<NonEmptyArray<string>, unknown>> = [];
 
   return {
-    add<T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string): Validator {
+    add<T>(input: T, predicateFn: (val: T) => boolean, errorMessage: string): MonoidValidator {
       try {
         const result = predicateFn(input);
         functionResults.push(result ? right(input) : lift(left)(errorMessage));
