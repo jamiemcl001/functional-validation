@@ -55,7 +55,6 @@ workflows:
             tags:
               only: /.*/
       - publish:
-          context: org-global
           requires:
             - test
           filters:
