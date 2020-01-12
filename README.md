@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/jamiemcl001/predicate-validation/badge.svg?branch=master)](https://coveralls.io/github/jamiemcl001/predicate-validation?branch=master)
 [![NPM](https://img.shields.io/npm/v/predicate-validation)](https://npmjs.com/package/predicate-validation)
 
-Allows you to provide an array of predicate functions as well as an input value and have an easy to use collection of error messages or valid result passed back to you.
+Allows you to chain together multiple predicate functions which, when evaluated will return a combined validation result.
 
 ## API
 
