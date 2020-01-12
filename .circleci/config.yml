@@ -1,0 +1,67 @@
+version: 2.1
+executors:
+  build:
+    docker:
+      - image: circleci/node:lts
+
+orbs:
+  coveralls: coveralls/coveralls@1.0.4
+
+jobs:
+  build:
+    executor: build
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run compile
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test:
+    executor: build
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm run test:coverage
+      - coveralls/upload
+
+  
+  publish:
+    executor: build
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN" > ./.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: org-global
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          context: org-global
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          context: org-global
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
