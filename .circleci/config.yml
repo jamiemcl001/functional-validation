@@ -45,12 +45,10 @@ workflows:
   build:
     jobs:
       - build:
-          context: org-global
           filters:
             tags:
               only: /.*/
       - test:
-          context: org-global
           requires:
             - build
           filters:
