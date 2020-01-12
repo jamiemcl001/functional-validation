@@ -2,26 +2,26 @@ import { createValidator, isSuccess, isError, getErrors, getResults } from '../o
 
 
 test(`it should give us an object if we don't want to work with monoids`, () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add("test2", val => val.length > 0, "the value should be at least 3 characters")
     .add("test3", val => val.length > 0, "the value should be at least 3 characters")
     .validate();
 
-  expect(isSuccess(validatonResult)).toEqual(true);
-  expect(validatonResult.value).toEqual(['test', 'test2', 'test3']);
+  expect(isSuccess(validationResult)).toEqual(true);
+  expect(validationResult.value).toEqual(['test', 'test2', 'test3']);
 });
 
 
 test(`it should give us an array of error messages when working with basic objects`, () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add({ inputValue: 20 }, val => val.inputValue > 20, "the input value of the passed object should be greater than 20")
     .add(3, val => val % 2 === 0, "the value should be an even number")
     .validate();
 
-  expect(isError(validatonResult)).toEqual(true)
-  const errors = isError(validatonResult) ? validatonResult.errors : null;
+  expect(isError(validationResult)).toEqual(true)
+  const errors = isError(validationResult) ? validationResult.errors : null;
 
   expect(errors).toEqual([
     'the input value of the passed object should be greater than 20',
@@ -31,74 +31,74 @@ test(`it should give us an array of error messages when working with basic objec
 
 
 test('isSuccess', () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add("test2", val => val.length > 0, "the value should be at least 3 characters")
     .add("test3", val => val.length > 0, "the value should be at least 3 characters")
     .validate();
-  expect(isSuccess(validatonResult)).toEqual(true);
+  expect(isSuccess(validationResult)).toEqual(true);
 
 
-  const validatonResult2 = createValidator()
+  const validationResult2 = createValidator()
     .add(20, (val: number) => val > 10, `the value has to be larger than 10`)
     .validate();
-  expect(isSuccess(validatonResult2)).toEqual(true);
+  expect(isSuccess(validationResult2)).toEqual(true);
 
 
-  const validatonResult3 = createValidator()
+  const validationResult3 = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add({ inputValue: 20 }, val => val.inputValue > 20, "the input value of the passed object should be greater than 20")
     .add(3, val => val % 2 === 0, "the value should be an even number")
     .validate();
-  expect(isSuccess(validatonResult3)).toEqual(false);
+  expect(isSuccess(validationResult3)).toEqual(false);
 });
 
 
 test('isError', () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add("test2", val => val.length > 0, "the value should be at least 3 characters")
     .add("test3", val => val.length > 0, "the value should be at least 3 characters")
     .validate();
-  expect(isError(validatonResult)).toEqual(false);
+  expect(isError(validationResult)).toEqual(false);
 
 
-  const validatonResult2 = createValidator()
+  const validationResult2 = createValidator()
     .add(20, (val: number) => val > 10, `the value has to be larger than 10`)
     .validate();
-  expect(isError(validatonResult2)).toEqual(false);
+  expect(isError(validationResult2)).toEqual(false);
 
 
-  const validatonResult3 = createValidator()
+  const validationResult3 = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add({ inputValue: 20 }, val => val.inputValue > 20, "the input value of the passed object should be greater than 20")
     .add(3, val => val % 2 === 0, "the value should be an even number")
     .validate();
-  expect(isError(validatonResult3)).toEqual(true);
+  expect(isError(validationResult3)).toEqual(true);
 });
 
 
 test('getErrors', () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add("test2", val => val.length > 0, "the value should be at least 3 characters")
     .add("test3", val => val.length > 0, "the value should be at least 3 characters")
     .validate();
-  expect(getErrors(validatonResult)).toEqual([]);
+  expect(getErrors(validationResult)).toEqual([]);
 
 
-  const validatonResult2 = createValidator()
+  const validationResult2 = createValidator()
     .add(20, (val: number) => val > 10, `the value has to be larger than 10`)
     .validate();
-  expect(getErrors(validatonResult2)).toEqual([]);
+  expect(getErrors(validationResult2)).toEqual([]);
 
 
-  const validatonResult3 = createValidator()
+  const validationResult3 = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add({ inputValue: 20 }, val => val.inputValue > 20, "the input value of the passed object should be greater than 20")
     .add(3, val => val % 2 === 0, "the value should be an even number")
     .validate();
-  expect(getErrors(validatonResult3)).toEqual([
+  expect(getErrors(validationResult3)).toEqual([
     "the input value of the passed object should be greater than 20",
     "the value should be an even number",
   ]);
@@ -106,24 +106,32 @@ test('getErrors', () => {
 
 
 test('getResults', () => {
-  const validatonResult = createValidator()
+  const validationResult = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add("test2", val => val.length > 0, "the value should be at least 3 characters")
     .add("test3", val => val.length > 0, "the value should be at least 3 characters")
     .validate();
-  expect(getResults(validatonResult)).toEqual(["test", "test2", "test3"]);
+  expect(getResults(validationResult)).toEqual(["test", "test2", "test3"]);
 
 
-  const validatonResult2 = createValidator()
+  const validationResult2 = createValidator()
     .add(20, (val: number) => val > 10, `the value has to be larger than 10`)
     .validate();
-  expect(getResults(validatonResult2)).toEqual([20]);
+  expect(getResults(validationResult2)).toEqual([20]);
 
 
-  const validatonResult3 = createValidator()
+  const validationResult3 = createValidator()
     .add("test", val => val.length > 0, "the value should be at least 3 characters")
     .add({ inputValue: 20 }, val => val.inputValue > 20, "the input value of the passed object should be greater than 20")
     .add(3, val => val % 2 === 0, "the value should be an even number")
     .validate();
-  expect(getResults(validatonResult3)).toEqual([]);
+  expect(getResults(validationResult3)).toEqual([]);
+});
+
+
+test('if the add function throws an error - it should result in a failure', () => {
+  const validationResult = createValidator()
+    .add("test", val => { throw new Error("Random Error") }, "the input value should be valid")
+    .validate()
+  expect(getErrors(validationResult)).toEqual(["the input value should be valid"]);
 });
